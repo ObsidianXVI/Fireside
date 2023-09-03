@@ -1,8 +1,9 @@
 library fireside;
 
 import 'dart:math';
-
 import 'package:flutter/material.dart';
+
+part './needle_widget.dart';
 
 void main() {
   runApp(const FiresideApp());
@@ -21,7 +22,8 @@ class FiresideApp extends StatelessWidget {
       ),
       initialRoute: '/player',
       routes: {
-        '/player': (_) => FiresidePlayer(),
+        '/player': (_) => const FiresidePlayer(),
+        '/test': (_) => MyApp(),
       },
     );
   }
@@ -53,6 +55,9 @@ class FiresidePlayerState extends State<FiresidePlayer>
     super.dispose();
   }
 
+  static const widthRatio = 70 / 276;
+  static const heightRatio = 63 / 348;
+
   @override
   Widget build(BuildContext context) {
     return Material(
@@ -81,13 +86,25 @@ class FiresidePlayerState extends State<FiresidePlayer>
               right: 0,
               top: 50,
               child: Transform.rotate(
-                angle: -pi / 4,
+                angle: -pi / 8,
                 child: Image(
                   image: AssetImage('images/arm_1.png'),
                   fit: BoxFit.cover,
                 ),
               ),
             ),
+/*             Positioned(
+              right: 0,
+              top: 50,
+              child: Transform(
+                transform: Matrix4.rotationZ(-pi / 4),
+                origin: const Offset(70, 63),
+                child: const Image(
+                  image: AssetImage('images/arm_1.png'),
+                  fit: BoxFit.cover,
+                ),
+              ),
+            ), */
           ],
         ),
       ),
