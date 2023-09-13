@@ -10,6 +10,9 @@
             "type": "dart",
             "program": "lib/main.dart",
             "deviceId": "chrome",
+            "args": [
+                "--web-port=56615",
+            ]
         }
     ]
 }

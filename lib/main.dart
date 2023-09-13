@@ -1,11 +1,37 @@
 library fireside;
 
+import 'dart:convert';
+import 'dart:html';
 import 'dart:math';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
+import 'package:http/http.dart';
+import 'package:spotify_sdk/spotify_sdk.dart';
+import 'package:spotify_sdk/spotify_sdk_web.dart';
 
+part './auth_view.dart';
+part './launch_view.dart';
+part './vinyl_widget.dart';
 part './needle_widget.dart';
 
-void main() {
+late final String clientId;
+late final String token;
+void main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+
+  clientId = jsonDecode(
+      await rootBundle.loadString('assets/secrets.json'))['clientId'];
+  token = await SpotifySdk.getAccessToken(
+    clientId: clientId,
+    redirectUrl: "http://localhost:8990/",
+    scope: "user-read-currently-playing",
+  );
+  await SpotifySdk.connectToSpotifyRemote(
+    clientId: clientId,
+    redirectUrl: "http://localhost:8990/",
+    accessToken: token,
+    scope: "user-read-currently-playing",
+  );
   runApp(const FiresideApp());
 }
 
@@ -20,10 +46,12 @@ class FiresideApp extends StatelessWidget {
       theme: ThemeData(
         useMaterial3: true,
       ),
-      initialRoute: '/player',
+      initialRoute: '/launch',
       routes: {
+        '/launch': (_) => const FiresideLaunchView(),
         '/player': (_) => const FiresidePlayer(),
         '/test': (_) => MyApp(),
+        '/auth': (_) => FiresideAuthView(),
       },
     );
   }
@@ -74,10 +102,7 @@ class FiresidePlayerState extends State<FiresidePlayer>
                 child: Center(
                   child: RotationTransition(
                     turns: _animation,
-                    child: Image(
-                      image: AssetImage('images/vinyl_1.png'),
-                      fit: BoxFit.cover,
-                    ),
+                    child: VinylWidget(),
                   ),
                 ),
               ),
