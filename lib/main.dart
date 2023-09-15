@@ -17,21 +17,6 @@ part './needle_widget.dart';
 late final String clientId;
 late final String token;
 void main() async {
-  WidgetsFlutterBinding.ensureInitialized();
-
-  clientId = jsonDecode(
-      await rootBundle.loadString('assets/secrets.json'))['clientId'];
-  token = await SpotifySdk.getAccessToken(
-    clientId: clientId,
-    redirectUrl: "http://localhost:8990/",
-    scope: "user-read-currently-playing",
-  );
-  await SpotifySdk.connectToSpotifyRemote(
-    clientId: clientId,
-    redirectUrl: "http://localhost:8990/",
-    accessToken: token,
-    scope: "user-read-currently-playing",
-  );
   runApp(const FiresideApp());
 }
 
@@ -46,7 +31,7 @@ class FiresideApp extends StatelessWidget {
       theme: ThemeData(
         useMaterial3: true,
       ),
-      initialRoute: '/launch',
+      initialRoute: '/auth',
       routes: {
         '/launch': (_) => const FiresideLaunchView(),
         '/player': (_) => const FiresidePlayer(),

@@ -11,15 +11,51 @@ class FiresideAuthViewState extends State<FiresideAuthView> {
   String res = 'waiting';
   @override
   void initState() {
-    print("Located:${Uri.base}");
     super.initState();
+  }
+
+  Future<void> connectToSpotify() async {
+    clientId = jsonDecode(
+        await rootBundle.loadString('assets/secrets.json'))['clientId'];
+    token = await SpotifySdk.getAccessToken(
+      clientId: clientId,
+      redirectUrl: "http://localhost:8990/",
+      scope: "user-read-playback-state",
+    );
+    print(token);
+    print('Got Token');
+  }
+
+  Future<void> showPlayerState() async {
+    final Response res = await get(
+      Uri.https('api.spotify.com', '/v1/me/player'),
+      headers: {
+        'Authorization': 'Bearer $token',
+      },
+    );
+    print(res.body);
   }
 
   @override
   Widget build(BuildContext context) {
-    return const Material(
+    return Material(
       child: Center(
-        child: Text('FiresideAuthView'),
+        child: Column(
+          children: [
+            TextButton(
+              onPressed: () async {
+                await connectToSpotify();
+              },
+              child: const Text('Connect to Spotify'),
+            ),
+            TextButton(
+              onPressed: () async {
+                await showPlayerState();
+              },
+              child: const Text('Get player info'),
+            ),
+          ],
+        ),
       ),
     );
   }
