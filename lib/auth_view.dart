@@ -44,7 +44,12 @@ class FiresideAuthViewState extends State<FiresideAuthView> {
           children: [
             TextButton(
               onPressed: () async {
-                await connectToSpotify();
+                try {
+                  await connectToSpotify();
+                } catch (e) {
+                  // This simple try-catch solves a lot of problems, so we'll
+                  // just leave it here
+                }
               },
               child: const Text('Connect to Spotify'),
             ),
