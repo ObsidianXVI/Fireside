@@ -18,10 +18,14 @@ part './vinyl_widget.dart';
 part './needle_widget.dart';
 
 late final String clientId;
+late final String username;
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
-  clientId = jsonDecode(
-      await rootBundle.loadString('assets/secrets.json'))['clientId'];
+  final Map secrets =
+      jsonDecode(await rootBundle.loadString('assets/secrets.json'));
+  clientId = secrets['clientId'];
+  username = secrets['username'];
+
   runApp(const FiresideApp());
 }
 
@@ -41,7 +45,7 @@ class FiresideApp extends StatelessWidget {
         '/launch': (_) => const FiresideLaunchView(),
         '/player': (_) => const FiresidePlayer(),
         '/shelf': (_) =>
-            const FiresideShelfView(showPlaylists: false, playlist: null),
+            const FiresideShelfView(showPlaylists: true, playlist: null),
         '/test': (_) => MyApp(),
         '/auth': (_) => const FiresideAuthView(),
       },
