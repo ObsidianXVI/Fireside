@@ -16,7 +16,7 @@ class FiresideAuthViewState extends State<FiresideAuthView> {
           onPressed: () async {
             try {
               AuthService.performAuth()
-                  .then((_) => Navigator.of(context).pushNamed('/player'));
+                  .then((_) => Navigator.of(context).pushNamed('/shelf'));
             } catch (e) {
               // This simple try-catch solves a lot of problems, so we'll
               // just leave it here

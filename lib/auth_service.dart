@@ -22,6 +22,5 @@ class AuthService {
       redirectUrl: "http://localhost:8990/",
       scope: scopes,
     );
-    print('Got Token:\n$_authToken');
   }
 }

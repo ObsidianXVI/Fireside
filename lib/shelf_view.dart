@@ -27,18 +27,71 @@ class FiresideShelfViewState extends State<FiresideShelfView> {
               tiles.addAll(
                 [
                   for (Playlist p in playlists)
-                    Row(
-                      children: [
-                        p.images.first,
-                        Text(
-                          p.name,
-                          style: const TextStyle(color: Colors.black),
-                        )
-                      ],
+                    Container(
+                      width: 200,
+                      height: 200,
+                      child: GestureDetector(
+                        onTap: () {
+                          setState(() {
+                            tiles
+                              ..clear()
+                              ..addAll([
+                                for (Track t in p.tracks)
+                                  GestureDetector(
+                                    child: Container(
+                                      width: 200,
+                                      height: 200,
+                                      child: Stack(
+                                        children: [
+                                          Positioned(
+                                            top: 0,
+                                            left: 0,
+                                            width: 200,
+                                            height: 200,
+                                            child: t.image,
+                                          ),
+                                          Positioned(
+                                            bottom: 0,
+                                            left: 10,
+                                            child: Text(
+                                              t.name,
+                                              style: const TextStyle(
+                                                color: Colors.white,
+                                              ),
+                                            ),
+                                          ),
+                                        ],
+                                      ),
+                                    ),
+                                  ),
+                              ]);
+                          });
+                        },
+                        child: Stack(
+                          children: [
+                            Positioned(
+                              top: 0,
+                              left: 0,
+                              width: 200,
+                              height: 200,
+                              child: p.image,
+                            ),
+                            Positioned(
+                              bottom: 0,
+                              left: 10,
+                              child: Text(
+                                p.name,
+                                style: const TextStyle(
+                                  color: Colors.white,
+                                ),
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
                     ),
                 ],
               );
-              print(tiles);
             });
           });
         } else {
@@ -59,10 +112,12 @@ class FiresideShelfViewState extends State<FiresideShelfView> {
 
   @override
   Widget build(BuildContext context) {
-    return Center(
-      child: SingleChildScrollView(
-        child: Column(
-          children: tiles,
+    return Material(
+      child: Center(
+        child: SingleChildScrollView(
+          child: Column(
+            children: tiles,
+          ),
         ),
       ),
     );
