@@ -38,6 +38,11 @@ class FiresideShelfViewState extends State<FiresideShelfView> {
                               ..addAll([
                                 for (Track t in p.tracks)
                                   GestureDetector(
+                                    onTap: () {
+                                      FiresideState.currentTrack = t;
+                                      Navigator.of(context)
+                                          .pushNamed('/player');
+                                    },
                                     child: Container(
                                       width: 200,
                                       height: 200,

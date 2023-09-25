@@ -14,6 +14,7 @@ part './auth_view.dart';
 part './launch_view.dart';
 part './shelf_view.dart';
 part './player_view.dart';
+part './dev_view.dart';
 
 part './vinyl_widget.dart';
 part './needle_widget.dart';
@@ -31,7 +32,6 @@ void main() async {
 }
 
 class FiresideApp extends StatelessWidget {
-  //static const Track currentTrack;
   const FiresideApp({super.key});
 
   // This widget is the root of your application.
@@ -42,7 +42,7 @@ class FiresideApp extends StatelessWidget {
       theme: ThemeData(
         useMaterial3: true,
       ),
-      initialRoute: '/launch',
+      initialRoute: '/dev',
       routes: {
         '/launch': (_) => const FiresideLaunchView(),
         '/player': (_) => const FiresidePlayer(),
@@ -50,8 +50,12 @@ class FiresideApp extends StatelessWidget {
             const FiresideShelfView(showPlaylists: true, playlist: null),
         '/test': (_) => MyApp(),
         '/auth': (_) => const FiresideAuthView(),
+        '/dev': (_) => const FiresideDevView(),
       },
     );
   }
 }
 
+class FiresideState {
+  static Track? currentTrack;
+}

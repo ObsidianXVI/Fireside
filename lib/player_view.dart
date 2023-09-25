@@ -21,6 +21,14 @@ class FiresidePlayerState extends State<FiresidePlayer>
   );
 
   @override
+  void initState() {
+    if (FiresideState.currentTrack == null) {
+      _controller.stop();
+    }
+    super.initState();
+  }
+
+  @override
   void dispose() {
     _controller.dispose();
     super.dispose();
@@ -45,7 +53,9 @@ class FiresidePlayerState extends State<FiresidePlayer>
                 child: Center(
                   child: RotationTransition(
                     turns: _animation,
-                    child: VinylWidget(),
+                    child: VinylWidget(
+                      trackImage: FiresideState.currentTrack!.image,
+                    ),
                   ),
                 ),
               ),
