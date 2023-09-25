@@ -46,8 +46,7 @@ class FiresideApp extends StatelessWidget {
       routes: {
         '/launch': (_) => const FiresideLaunchView(),
         '/player': (_) => const FiresidePlayer(),
-        '/shelf': (_) =>
-            const FiresideShelfView(showPlaylists: true, playlist: null),
+        '/shelf': (_) => const FiresideShelfView(items: null),
         '/test': (_) => MyApp(),
         '/auth': (_) => const FiresideAuthView(),
         '/dev': (_) => const FiresideDevView(),

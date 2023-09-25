@@ -24,6 +24,7 @@ class FiresidePlayerState extends State<FiresidePlayer>
   void initState() {
     if (FiresideState.currentTrack == null) {
       _controller.stop();
+      Navigator.of(context).pushNamed('/shelf');
     }
     super.initState();
   }
@@ -34,13 +35,10 @@ class FiresidePlayerState extends State<FiresidePlayer>
     super.dispose();
   }
 
-  static const widthRatio = 70 / 276;
-  static const heightRatio = 63 / 348;
-
   @override
   Widget build(BuildContext context) {
     return Material(
-      color: Colors.green,
+      // color: Colors.green,
       child: Center(
         child: Stack(
           children: [
@@ -49,7 +47,7 @@ class FiresidePlayerState extends State<FiresidePlayer>
               child: Container(
                 width: 800,
                 height: 800,
-                color: Colors.amber,
+                // color: Colors.amber,
                 child: Center(
                   child: RotationTransition(
                     turns: _animation,

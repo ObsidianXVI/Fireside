@@ -12,14 +12,6 @@ class SpotifyService {
       ))
           .body);
       for (Map item in res['items']) {
-        final Map res2 = jsonDecode((await get(
-          Uri.https('api.spotify.com', '/v1/playlists/${item['id']}/tracks'),
-          headers: {
-            'Authorization': 'Bearer $token',
-          },
-        ))
-            .body);
-        (res2['items'] as List).removeWhere((e) => e['track']['id'] == null);
         playlists.add(
           Playlist(
             id: item['id'],
@@ -32,28 +24,6 @@ class SpotifyService {
             description: item['description'],
             name: item['name'],
             tracksCount: item['tracks']['total'],
-            tracks: [
-              for (Map? trackItem in res2['items'])
-                if (trackItem != null && trackItem['track'] != null)
-                  Track(
-                    id: trackItem['track']['id'],
-                    artists: [
-                      for (Map artist in trackItem['track']['artists'])
-                        artist['name']
-                    ],
-                    duration: Duration(
-                        milliseconds: trackItem['track']['duration_ms'] as int),
-                    name: trackItem['track']['name'],
-                    uri: trackItem['track']['uri'],
-                    image: Image.network(
-                      trackItem['track']['album']['images'][0]['url'],
-                      width: trackItem['track']['album']['images'][0]['width'],
-                      height: trackItem['track']['album']['images'][0]
-                          ['height'],
-                      fit: BoxFit.cover,
-                    ),
-                  ),
-            ],
           ),
         );
       }
@@ -61,30 +31,33 @@ class SpotifyService {
     });
   }
 
-  static Future<List<Track>> getTracks(List<String> trackIds) async {
+  static Future<List<Track>> getTracksInPlaylist(String playlistId) async {
     return await AuthService.withToken<List<Track>>((String token) async {
       final List<Track> tracks = [];
       final Map res = jsonDecode((await get(
-        Uri.https('api.spotify.com', '/v1/tracks', {
-          'ids': trackIds.join(','),
-        }),
+        Uri.https('api.spotify.com', '/v1/playlists/$playlistId/tracks'),
         headers: {
           'Authorization': 'Bearer $token',
         },
       ))
           .body);
-      for (Map item in res['tracks']) {
+      (res['items'] as List).removeWhere((e) => e['track']['id'] == null);
+
+      for (Map trackItem in res['items']) {
         tracks.add(
           Track(
-            id: item['id'],
-            uri: item['uri'],
-            name: item['name'],
-            duration: Duration(milliseconds: item['duration'] as int),
-            artists: [for (Map artist in item['artists']) artist['name']],
+            id: trackItem['track']['id'],
+            artists: [
+              for (Map artist in trackItem['track']['artists']) artist['name']
+            ],
+            duration: Duration(
+                milliseconds: trackItem['track']['duration_ms'] as int),
+            name: trackItem['track']['name'],
+            uri: trackItem['track']['uri'],
             image: Image.network(
-              item['album']['images'][0]['url'],
-              width: item['album']['images'][0]['width'],
-              height: item['album']['images'][0]['height'],
+              trackItem['track']['album']['images'][0]['url'],
+              width: trackItem['track']['album']['images'][0]['width'],
+              height: trackItem['track']['album']['images'][0]['height'],
               fit: BoxFit.cover,
             ),
           ),
@@ -101,7 +74,6 @@ class Playlist {
   final String description;
   final String name;
   final int tracksCount;
-  final List<Track> tracks;
 
   const Playlist({
     required this.id,
@@ -109,7 +81,6 @@ class Playlist {
     required this.description,
     required this.name,
     required this.tracksCount,
-    required this.tracks,
   });
 }
 
