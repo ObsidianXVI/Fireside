@@ -1,11 +1,11 @@
 part of fireside;
 
 class VinylWidget extends StatelessWidget {
-  /// The radius of the inner circle
-  static const double _innerRadius = 118;
+  /// The radius-ish of the inner circle
+  static const double _innerRadius = 120;
 
-  /// The distance from the top of the record to the top of the inner circle
-  static const double _distFromTop = 234;
+  /// The distance-ish from the top of the record to the top of the inner circle
+  static const double _distFromTop = 232;
 
   final Image trackImage;
 
