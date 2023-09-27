@@ -1,20 +1,80 @@
 part of fireside;
 
-class MyApp extends StatefulWidget {
+class ToneArmWidget extends StatefulWidget {
+  final void Function() toggleCallback;
+
+  const ToneArmWidget({
+    required this.toggleCallback,
+    super.key,
+  });
+
   @override
-  _MyAppState createState() => _MyAppState();
+  ToneArmWidgetState createState() => ToneArmWidgetState();
 }
 
-class _MyAppState extends State<MyApp> {
-  double _angle = 0.0;
-  double _oldAngle = 0.0;
-  double _angleDelta = 0.0;
-  static const widthRatio = 70 / 276;
-  static const heightRatio = 63 / 348;
+class ToneArmWidgetState extends State<ToneArmWidget> {
+  double rotAngle = -pi / 8;
 
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
+    return Center(
+      child: Transform(
+        transform: Matrix4.rotationZ(rotAngle),
+        origin: Offset(205, 68),
+        child: Container(
+          // color: Colors.green,
+          child: Stack(
+            children: [
+              Image(
+                image: AssetImage('images/arm_1.png'),
+              ),
+              Positioned(
+                top: 68,
+                left: 205, //61,
+                child: Container(
+                  width: 10,
+                  height: 10,
+                  // color: Colors.amber,
+                ),
+              ),
+              Positioned(
+                top: 6,
+                right: 20,
+                child: Transform.rotate(
+                  angle: pi / 4,
+                  child: GestureDetector(
+                    onTap: () {
+                      setState(() {
+                        widget.toggleCallback();
+                        rotAngle = rotAngle == -pi / 8 ? -pi / 4 : -pi / 8;
+                      });
+                    },
+                    child: Container(
+                      width: 30,
+                      height: 40,
+                      color: Colors.transparent,
+                      // color: Colors.pink,
+                    ),
+                  ),
+                ),
+              ),
+            ],
+          ),
+        ),
+      ),
+    );
+  }
+}
+//        origin: Offset(205, 68),
+
+/**
+ *   double _angle = 0.0;
+  double _oldAngle = 0.0;
+  double _angleDelta = 0.0;
+  double rotAngle = -pi / 8;
+  static const widthRatio = 70 / 276;
+  static const heightRatio = 63 / 348;
+ * MaterialApp(
       debugShowCheckedModeBanner: false,
       home: Scaffold(
         body: SafeArea(
@@ -97,6 +157,5 @@ class _MyAppState extends State<MyApp> {
           ),
         ),
       ),
-    );
-  }
-}
+    )
+ */

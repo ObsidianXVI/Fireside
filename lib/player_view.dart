@@ -25,6 +25,8 @@ class FiresidePlayerState extends State<FiresidePlayer>
     if (FiresideState.currentTrack == null) {
       _controller.stop();
       Navigator.of(context).pushNamed('/shelf');
+    } else {
+      SpotifyService.playTrack(FiresideState.currentTrack!);
     }
     super.initState();
   }
@@ -61,12 +63,18 @@ class FiresidePlayerState extends State<FiresidePlayer>
             Positioned(
               right: 0,
               top: 50,
-              child: Transform.rotate(
-                angle: -pi / 8,
-                child: Image(
-                  image: AssetImage('images/arm_1.png'),
-                  fit: BoxFit.cover,
-                ),
+              child: ToneArmWidget(
+                toggleCallback: () {
+                  setState(() {
+                    if (_controller.isAnimating) {
+                      SpotifyService.pausePlayback();
+                      _controller.stop();
+                    } else {
+                      SpotifyService.resumePlayback();
+                      _controller.repeat();
+                    }
+                  });
+                },
               ),
             ),
 /*             Positioned(

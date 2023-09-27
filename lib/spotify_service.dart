@@ -66,6 +66,45 @@ class SpotifyService {
       return tracks;
     });
   }
+
+  static Future<void> playTrack(Track track) async {
+    return await AuthService.withToken<void>((String token) async {
+      final Map res = jsonDecode(
+          (await put(Uri.https('api.spotify.com', '/v1/me/player/play'),
+                  headers: {
+                    'Authorization': 'Bearer $token',
+                  },
+                  body: jsonEncode({
+                    'uris': [track.uri],
+                  })))
+              .body);
+      print(res);
+    });
+  }
+
+  static Future<void> pausePlayback() async {
+    return await AuthService.withToken<void>((String token) async {
+      final Map res = jsonDecode((await put(
+        Uri.https('api.spotify.com', '/v1/me/player/pause'),
+        headers: {
+          'Authorization': 'Bearer $token',
+        },
+      ))
+          .body);
+    });
+  }
+
+  static Future<void> resumePlayback() async {
+    return await AuthService.withToken<void>((String token) async {
+      final Map res = jsonDecode((await put(
+        Uri.https('api.spotify.com', '/v1/me/player/play'),
+        headers: {
+          'Authorization': 'Bearer $token',
+        },
+      ))
+          .body);
+    });
+  }
 }
 
 class Playlist {

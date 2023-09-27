@@ -17,7 +17,7 @@ part './player_view.dart';
 part './dev_view.dart';
 
 part './vinyl_widget.dart';
-part './needle_widget.dart';
+part 'tonearm_widget.dart';
 
 late final String clientId;
 late final String username;
@@ -47,7 +47,6 @@ class FiresideApp extends StatelessWidget {
         '/launch': (_) => const FiresideLaunchView(),
         '/player': (_) => const FiresidePlayer(),
         '/shelf': (_) => const FiresideShelfView(items: null),
-        '/test': (_) => MyApp(),
         '/auth': (_) => const FiresideAuthView(),
         '/dev': (_) => const FiresideDevView(),
       },
