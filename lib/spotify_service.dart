@@ -68,17 +68,47 @@ class SpotifyService {
   }
 
   static Future<void> playTrack(Track track) async {
+    final List<String> queue = await getQueue();
     return await AuthService.withToken<void>((String token) async {
-      final Map res = jsonDecode(
-          (await put(Uri.https('api.spotify.com', '/v1/me/player/play'),
-                  headers: {
-                    'Authorization': 'Bearer $token',
-                  },
-                  body: jsonEncode({
-                    'uris': [track.uri],
-                  })))
-              .body);
-      print(res);
+      (await put(Uri.https('api.spotify.com', '/v1/me/player/play'),
+              headers: {
+                'Authorization': 'Bearer $token',
+                "content-type": "application/json",
+              },
+              body: jsonEncode({
+                'uris': [track.uri],
+              })))
+          .body;
+      await restoreQueue(queue);
+    });
+  }
+
+  static Future<List<String>> getQueue() async {
+    return await AuthService.withToken<List<String>>((String token) async {
+      final Map res = jsonDecode((await get(
+              Uri.https('api.spotify.com', '/v1/me/player/queue'),
+              headers: {
+            'Authorization': 'Bearer $token',
+          }))
+          .body);
+
+      final List<String> queue = [for (Map m in res['queue']) m['uri']];
+      return queue;
+    });
+  }
+
+  static Future<void> restoreQueue(List<String> queue) async {
+    return await AuthService.withToken((String token) async {
+      for (String uri in queue) {
+        await post(
+          Uri.https('api.spotify.com', '/v1/me/player/queue', {
+            'uri': uri,
+          }),
+          headers: {
+            'Authorization': 'Bearer $token',
+          },
+        );
+      }
     });
   }
 
