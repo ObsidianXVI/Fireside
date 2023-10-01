@@ -11,6 +11,10 @@ class FiresidePlayer extends StatefulWidget {
 
 class FiresidePlayerState extends State<FiresidePlayer>
     with TickerProviderStateMixin {
+  late Track currentTrack;
+  Color bgColor = Colors.transparent;
+  Color textColor = Colors.transparent;
+
   late final AnimationController _controller = AnimationController(
     duration: const Duration(seconds: 12),
     vsync: this,
@@ -26,7 +30,17 @@ class FiresidePlayerState extends State<FiresidePlayer>
       _controller.stop();
       Navigator.of(context).pushNamed('/shelf');
     } else {
-      SpotifyService.playTrack(FiresideState.currentTrack!);
+      currentTrack = FiresideState.currentTrack!;
+      ColorScheme.fromImageProvider(provider: currentTrack.image.image)
+          .then((ColorScheme colorScheme) {
+        setState(() {
+          bgColor = colorScheme.primary;
+          textColor = bgColor.lighterTone.withOpacity(0.85);
+          print(textColor);
+          print(bgColor);
+        });
+      });
+      SpotifyService.playTrack(currentTrack);
     }
     super.initState();
   }
@@ -40,21 +54,32 @@ class FiresidePlayerState extends State<FiresidePlayer>
   @override
   Widget build(BuildContext context) {
     return Material(
-      // color: Colors.green,
+      color: bgColor,
       child: Center(
         child: Stack(
           children: [
+            Positioned(
+              left: 20,
+              top: 20,
+              child: Text(
+                currentTrack.name,
+                style: TextStyle(
+                  color: textColor,
+                  fontWeight: FontWeight.w800,
+                  fontSize: 40,
+                ),
+              ),
+            ),
             Padding(
               padding: const EdgeInsets.all(30),
               child: Container(
                 width: 800,
                 height: 800,
-                // color: Colors.amber,
                 child: Center(
                   child: RotationTransition(
                     turns: _animation,
                     child: VinylWidget(
-                      trackImage: FiresideState.currentTrack!.image,
+                      trackImage: currentTrack.image,
                     ),
                   ),
                 ),
@@ -94,4 +119,9 @@ class FiresidePlayerState extends State<FiresidePlayer>
       ),
     );
   }
+}
+
+extension ColorUtils on Color {
+  Color get lighterTone =>
+      Color(value).withGreen(green + 40).withBlue(blue + 40);
 }

@@ -22,42 +22,78 @@ class FiresideDevViewState extends State<FiresideDevView>
   @override
   Widget build(BuildContext context) {
     return Material(
-      // color: Colors.green,
-      child: Center(
-        child: Stack(
-          children: [
-            Padding(
-              padding: const EdgeInsets.all(30),
-              child: Container(
-                width: 800,
-                height: 800,
-                // color: Colors.amber,
-                child: Center(
-                  child: RotationTransition(
-                    turns: _animation,
-                    child: VinylWidget(
-                      trackImage:
-                          Image(image: AssetImage('images/kid_cudi.jpg')),
+      color: Colors.purple,
+      child: Align(
+        alignment: Alignment.centerRight,
+        child: Container(
+          child: Align(
+            child: Stack(
+              children: [
+                Positioned(
+                  top: 20,
+                  right: 300,
+                  width: 700,
+                  height: 650,
+                  child: Container(
+                    width: 700,
+                    height: 650,
+                    child: const Text(
+                      'The Void',
+                      maxLines: 3,
+                      overflow: TextOverflow.ellipsis,
+                      style: TextStyle(
+                        fontFamily: 'Cairo',
+                        color: Colors.pink,
+                        fontWeight: FontWeight.w800,
+                        fontSize: 200,
+                        height: 0.8,
+                      ),
                     ),
                   ),
                 ),
-              ),
-            ),
-            Positioned(
-              right: 0,
-              top: 50,
-              child: ToneArmWidget(
-                toggleCallback: () {},
-              ),
-              /* Transform.rotate(
-                angle: -pi / 8,
-                child: Image(
-                  image: AssetImage('images/arm_1.png'),
-                  fit: BoxFit.cover,
+                Positioned(
+                  top: 0,
+                  right: 0,
+                  child: Stack(
+                    children: [
+                      Padding(
+                        padding: const EdgeInsets.all(30),
+                        child: Container(
+                          width: 800,
+                          height: 800,
+                          child: Center(
+                            child: RotationTransition(
+                              turns: _animation,
+                              child: VinylWidget(
+                                trackImage: Image.asset('images/kid_cudi.jpg'),
+                              ),
+                            ),
+                          ),
+                        ),
+                      ),
+                      Positioned(
+                        right: 0,
+                        top: 50,
+                        child: ToneArmWidget(
+                          toggleCallback: () {
+                            setState(() {
+                              if (_controller.isAnimating) {
+                                SpotifyService.pausePlayback();
+                                _controller.stop();
+                              } else {
+                                SpotifyService.resumePlayback();
+                                _controller.repeat();
+                              }
+                            });
+                          },
+                        ),
+                      ),
+                    ],
+                  ),
                 ),
-              ), */
+              ],
             ),
-          ],
+          ),
         ),
       ),
     );

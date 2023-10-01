@@ -18,12 +18,35 @@ class VinylWidget extends StatelessWidget {
   Widget build(BuildContext context) {
     return Stack(
       children: [
+        Positioned(
+          top: 10,
+          left: 10,
+          right: 10,
+          bottom: 10,
+          child: Container(
+            width: 680,
+            height: 680,
+            decoration: BoxDecoration(
+              shape: BoxShape.circle,
+              color: Colors.transparent,
+              boxShadow: [
+                BoxShadow(
+                  color: Colors.black.withOpacity(0.6),
+                  blurRadius: 20,
+                  spreadRadius: 1,
+                ),
+              ],
+            ),
+          ),
+        ),
         Container(
           width: 700,
           height: 700,
-          child: const Image(
-            image: AssetImage('images/vinyl_1.png'),
-            fit: BoxFit.cover,
+          decoration: BoxDecoration(
+            image: const DecorationImage(
+              image: AssetImage('images/vinyl_1.png'),
+            ),
+            borderRadius: BorderRadius.circular(100),
           ),
         ),
         Positioned(
