@@ -53,75 +53,6 @@ class FiresidePlayerState extends State<FiresidePlayer>
   }
 
   @override
-/*   Widget build(BuildContext context) {
-    return Material(
-      color: bgColor,
-      child: Center(
-        child: Stack(
-          children: [
-            Positioned(
-              left: 20,
-              top: 20,
-              child: Text(
-                currentTrack.name,
-                style: TextStyle(
-                  color: textColor,
-                  fontWeight: FontWeight.w800,
-                  fontSize: 40,
-                ),
-              ),
-            ),
-            Padding(
-              padding: const EdgeInsets.all(30),
-              child: Container(
-                width: 800,
-                height: 800,
-                child: Center(
-                  child: RotationTransition(
-                    turns: _animation,
-                    child: VinylWidget(
-                      trackImage: currentTrack.image,
-                    ),
-                  ),
-                ),
-              ),
-            ),
-            Positioned(
-              right: 0,
-              top: 50,
-              child: ToneArmWidget(
-                toggleCallback: () {
-                  setState(() {
-                    if (_controller.isAnimating) {
-                      SpotifyService.pausePlayback();
-                      _controller.stop();
-                    } else {
-                      SpotifyService.resumePlayback();
-                      _controller.repeat();
-                    }
-                  });
-                },
-              ),
-            ),
-/*             Positioned(
-              right: 0,
-              top: 50,
-              child: Transform(
-                transform: Matrix4.rotationZ(-pi / 4),
-                origin: const Offset(70, 63),
-                child: const Image(
-                  image: AssetImage('images/arm_1.png'),
-                  fit: BoxFit.cover,
-                ),
-              ),
-            ), */
-          ],
-        ),
-      ),
-    );
-  }
- */
-
   Widget build(BuildContext context) {
     return Material(
       color: bgColor,
@@ -246,21 +177,35 @@ class FiresidePlayerState extends State<FiresidePlayer>
                     primary: primary,
                     accent: accent,
                     iconData: Icons.skip_previous,
-                    callback: () {},
+                    callback: () {
+                      SpotifyService.skipToPrevious();
+                    },
                   ),
                   const SizedBox(width: 20),
                   PlaybackControlButton(
                     primary: primary,
                     accent: accent,
                     iconData: Icons.pause_circle,
-                    callback: () {},
+                    callback: () {
+                      setState(() {
+                        if (_controller.isAnimating) {
+                          SpotifyService.pausePlayback();
+                          _controller.stop();
+                        } else {
+                          SpotifyService.resumePlayback();
+                          _controller.repeat();
+                        }
+                      });
+                    },
                   ),
                   const SizedBox(width: 20),
                   PlaybackControlButton(
                     primary: primary,
                     accent: accent,
                     iconData: Icons.skip_next,
-                    callback: () {},
+                    callback: () {
+                      SpotifyService.skipToNext();
+                    },
                   ),
                 ],
               ),

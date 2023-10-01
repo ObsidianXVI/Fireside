@@ -15,6 +15,7 @@ class SpotifyService {
         playlists.add(
           Playlist(
             id: item['id'],
+            uri: item['uri'],
             image: Image.network(
               item['images'][0]['url'],
               width: item['images'][0]['width'],
@@ -31,28 +32,30 @@ class SpotifyService {
     });
   }
 
-  static Future<List<Track>> getTracksInPlaylist(String playlistId) async {
+  static Future<List<Track>> getTracksInPlaylist(Playlist playlist) async {
     return await AuthService.withToken<List<Track>>((String token) async {
       final List<Track> tracks = [];
       final Map res = jsonDecode((await get(
-        Uri.https('api.spotify.com', '/v1/playlists/$playlistId/tracks'),
+        Uri.https('api.spotify.com', '/v1/playlists/${playlist.id}/tracks'),
         headers: {
           'Authorization': 'Bearer $token',
         },
       ))
           .body);
       (res['items'] as List).removeWhere((e) => e['track']['id'] == null);
-
+      int offset = 0;
       for (Map trackItem in res['items']) {
         tracks.add(
           Track(
             id: trackItem['track']['id'],
+            offset: offset,
             artists: [
               for (Map artist in trackItem['track']['artists']) artist['name']
             ],
             duration: Duration(
                 milliseconds: trackItem['track']['duration_ms'] as int),
             name: trackItem['track']['name'],
+            playlistUri: playlist.uri,
             uri: trackItem['track']['uri'],
             image: Image.network(
               trackItem['track']['album']['images'][0]['url'],
@@ -62,24 +65,38 @@ class SpotifyService {
             ),
           ),
         );
+        offset += 1;
       }
       return tracks;
     });
   }
 
   static Future<void> playTrack(Track track) async {
-    final List<String> queue = await getQueue();
     return await AuthService.withToken<void>((String token) async {
       (await put(Uri.https('api.spotify.com', '/v1/me/player/play'),
               headers: {
                 'Authorization': 'Bearer $token',
-                "content-type": "application/json",
               },
               body: jsonEncode({
-                'uris': [track.uri],
+                'context_uri': track.playlistUri,
+                'offset': {
+                  'position': track.offset,
+                },
+                // 'uris': [track.uri],
               })))
           .body;
-      await restoreQueue(queue);
+      // await restoreQueue(queue);
+    });
+  }
+
+  static Future<String> getContextUri() async {
+    return await AuthService.withToken<String>((String token) async {
+      final Map res = jsonDecode(
+          (await get(Uri.https('api.spotify.com', '/v1/me/player'), headers: {
+        'Authorization': 'Bearer $token',
+      }))
+              .body);
+      return res['context']['uri'];
     });
   }
 
@@ -135,10 +152,28 @@ class SpotifyService {
           .body);
     });
   }
+
+  static Future<void> skipToNext() async {
+    return await AuthService.withToken((String token) async {
+      await put(Uri.https('api.spotify.com', '/v1/me/player/next'), headers: {
+        'Authorization': 'Bearer $token',
+      });
+    });
+  }
+
+  static Future<void> skipToPrevious() async {
+    return await AuthService.withToken((String token) async {
+      await put(Uri.https('api.spotify.com', '/v1/me/player/previous'),
+          headers: {
+            'Authorization': 'Bearer $token',
+          });
+    });
+  }
 }
 
 class Playlist {
   final String id;
+  final String uri;
   final Image image;
   final String description;
   final String name;
@@ -146,6 +181,7 @@ class Playlist {
 
   const Playlist({
     required this.id,
+    required this.uri,
     required this.image,
     required this.description,
     required this.name,
@@ -155,18 +191,22 @@ class Playlist {
 
 class Track {
   final String id;
+  final int offset;
   final List<String> artists;
   final Duration duration;
   final String name;
   final String uri;
+  final String playlistUri;
   final Image image;
 
   const Track({
     required this.id,
+    required this.offset,
     required this.artists,
     required this.duration,
     required this.name,
     required this.uri,
+    required this.playlistUri,
     required this.image,
   });
 }

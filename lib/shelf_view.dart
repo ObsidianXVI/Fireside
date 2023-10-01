@@ -31,9 +31,10 @@ class FiresideShelfViewState extends State<FiresideShelfView> {
                       child: GestureDetector(
                         onTap: () async {
                           final List<Track> tracks =
-                              await SpotifyService.getTracksInPlaylist(p.id);
+                              await SpotifyService.getTracksInPlaylist(p);
 
                           setState(() {
+                            FiresideState.currentPlaylist = p;
                             Navigator.of(context).push(
                               MaterialPageRoute(
                                 builder: (BuildContext context) {

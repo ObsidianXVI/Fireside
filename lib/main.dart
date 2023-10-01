@@ -43,7 +43,7 @@ class FiresideApp extends StatelessWidget {
       theme: ThemeData(
         useMaterial3: true,
       ),
-      initialRoute: '/dev',
+      initialRoute: '/launch',
       routes: {
         '/launch': (_) => const FiresideLaunchView(),
         '/player': (_) => const FiresidePlayer(),
@@ -57,4 +57,5 @@ class FiresideApp extends StatelessWidget {
 
 class FiresideState {
   static Track? currentTrack;
+  static Playlist? currentPlaylist;
 }
