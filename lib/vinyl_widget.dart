@@ -7,7 +7,7 @@ class VinylWidget extends StatelessWidget {
   /// The distance-ish from the top of the record to the top of the inner circle
   static const double _distFromTop = 232;
 
-  final Image trackImage;
+  final ImageProvider trackImage;
 
   const VinylWidget({
     required this.trackImage,
@@ -60,7 +60,7 @@ class VinylWidget extends StatelessWidget {
             decoration: BoxDecoration(
               shape: BoxShape.circle,
               image: DecorationImage(
-                image: trackImage.image,
+                image: trackImage,
                 fit: BoxFit.fill,
               ),
             ),

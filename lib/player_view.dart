@@ -114,7 +114,7 @@ class FiresidePlayerState extends State<FiresidePlayer>
                               child: RotationTransition(
                                 turns: _animation,
                                 child: VinylWidget(
-                                  trackImage: currentTrack.image,
+                                  trackImage: currentTrack.image.image,
                                 ),
                               ),
                             ),

@@ -9,7 +9,7 @@ import 'package:http/http.dart';
 import 'package:spotify_sdk/spotify_sdk.dart';
 
 part './auth_service.dart';
-part 'spotify_service.dart';
+part './spotify_service.dart';
 
 part './auth_view.dart';
 part './launch_view.dart';
@@ -18,7 +18,8 @@ part './player_view.dart';
 part './dev_view.dart';
 
 part './vinyl_widget.dart';
-part 'tonearm_widget.dart';
+part './tonearm_widget.dart';
+part './record_sleeve_widget.dart';
 
 late final String clientId;
 late final String username;

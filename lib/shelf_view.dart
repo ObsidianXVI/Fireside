@@ -25,81 +25,39 @@ class FiresideShelfViewState extends State<FiresideShelfView> {
               tiles.addAll(
                 [
                   for (Playlist p in playlists)
-                    Container(
-                      width: 200,
-                      height: 200,
-                      child: GestureDetector(
-                        onTap: () async {
-                          final List<Track> tracks =
-                              await SpotifyService.getTracksInPlaylist(p);
+                    GestureDetector(
+                      onTap: () async {
+                        final List<Track> tracks =
+                            await SpotifyService.getTracksInPlaylist(p);
 
-                          setState(() {
-                            FiresideState.currentPlaylist = p;
-                            Navigator.of(context).push(
-                              MaterialPageRoute(
-                                builder: (BuildContext context) {
-                                  return FiresideShelfView(
-                                    items: [
-                                      for (Track t in tracks)
-                                        GestureDetector(
-                                          onTap: () {
-                                            FiresideState.currentTrack = t;
-                                            Navigator.of(context)
-                                                .pushNamed('/player');
-                                          },
-                                          child: Container(
-                                            width: 200,
-                                            height: 200,
-                                            child: Stack(
-                                              children: [
-                                                Positioned(
-                                                  top: 0,
-                                                  left: 0,
-                                                  width: 200,
-                                                  height: 200,
-                                                  child: t.image,
-                                                ),
-                                                Positioned(
-                                                  bottom: 0,
-                                                  left: 10,
-                                                  child: Text(
-                                                    t.name,
-                                                    style: const TextStyle(
-                                                      color: Colors.white,
-                                                    ),
-                                                  ),
-                                                ),
-                                              ],
-                                            ),
-                                          ),
-                                        ),
-                                    ],
-                                  );
-                                },
-                              ),
-                            );
-                          });
-                        },
-                        child: Stack(
-                          children: [
-                            Positioned(
-                              top: 0,
-                              left: 0,
-                              width: 200,
-                              height: 200,
-                              child: p.image,
+                        setState(() {
+                          FiresideState.currentPlaylist = p;
+                          Navigator.of(context).push(
+                            MaterialPageRoute(
+                              builder: (BuildContext context) {
+                                return FiresideShelfView(
+                                  items: [
+                                    for (Track t in tracks)
+                                      RecordSleeveWidget(
+                                        track: t,
+                                        callback: () {
+                                          FiresideState.currentTrack = t;
+                                          Navigator.of(context)
+                                              .pushNamed('/player');
+                                        },
+                                      ),
+                                  ],
+                                );
+                              },
                             ),
-                            Positioned(
-                              bottom: 0,
-                              left: 10,
-                              child: Text(
-                                p.name,
-                                style: const TextStyle(
-                                  color: Colors.white,
-                                ),
-                              ),
-                            ),
-                          ],
+                          );
+                        });
+                      },
+                      child: Container(
+                        width: 200,
+                        height: 200,
+                        decoration: BoxDecoration(
+                          image: DecorationImage(image: p.image.image),
                         ),
                       ),
                     ),
