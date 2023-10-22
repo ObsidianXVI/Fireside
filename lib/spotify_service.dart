@@ -171,42 +171,48 @@ class SpotifyService {
   }
 }
 
-class Playlist {
+abstract class SpotifyObject {
+  final String name;
+
   final String id;
   final String uri;
   final Image image;
-  final String description;
-  final String name;
-  final int tracksCount;
-
-  const Playlist({
+  const SpotifyObject({
+    required this.name,
     required this.id,
     required this.uri,
     required this.image,
-    required this.description,
-    required this.name,
-    required this.tracksCount,
   });
 }
 
-class Track {
-  final String id;
+class Playlist extends SpotifyObject {
+  final String description;
+  final int tracksCount;
+
+  const Playlist({
+    required this.description,
+    required this.tracksCount,
+    required super.name,
+    required super.id,
+    required super.uri,
+    required super.image,
+  });
+}
+
+class Track extends SpotifyObject {
   final int offset;
   final List<String> artists;
   final Duration duration;
-  final String name;
-  final String uri;
   final String playlistUri;
-  final Image image;
 
   const Track({
-    required this.id,
     required this.offset,
     required this.artists,
     required this.duration,
-    required this.name,
-    required this.uri,
     required this.playlistUri,
-    required this.image,
+    required super.name,
+    required super.id,
+    required super.uri,
+    required super.image,
   });
 }

@@ -44,11 +44,10 @@ class FiresideApp extends StatelessWidget {
       theme: ThemeData(
         useMaterial3: true,
       ),
-      initialRoute: '/launch',
+      initialRoute: '/dev',
       routes: {
         '/launch': (_) => const FiresideLaunchView(),
         '/player': (_) => const FiresidePlayer(),
-        '/shelf': (_) => const FiresideShelfView(items: null),
         '/auth': (_) => const FiresideAuthView(),
         '/dev': (_) => const FiresideDevView(),
       },

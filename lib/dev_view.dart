@@ -5,6 +5,7 @@ class FiresideDevView extends StatefulWidget {
     super.key,
   });
 
+  @override
   createState() => FiresideDevViewState();
 }
 
@@ -13,12 +14,27 @@ class FiresideDevViewState extends State<FiresideDevView> {
   Widget build(BuildContext context) {
     return Material(
       color: Colors.purple,
-/*       child: Center(
-        child: RecordSleeveWidget(
-          track: const AssetImage('images/kid_cudi.jpg'),
+      child: FiresideShelfView<Track>(
+        items: List<Track>.generate(
+          15,
+          (index) => Track(
+            id: 'id',
+            offset: 0,
+            artists: [],
+            duration: const Duration(seconds: 20),
+            name: 'name',
+            uri: 'uri',
+            playlistUri: 'playlistUri',
+            image: Image.asset(
+              'images/kid_cudi.jpg',
+            ),
+          ),
+        ),
+        createWidget: (track) => RecordSleeveWidget(
+          track: track,
           callback: () {},
         ),
-      ), */
+      ),
     );
   }
 }
