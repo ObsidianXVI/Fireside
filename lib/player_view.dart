@@ -29,7 +29,7 @@ class FiresidePlayerState extends State<FiresidePlayer>
   void initState() {
     if (FiresideState.currentTrack == null) {
       _controller.stop();
-      Navigator.of(context).pushNamed('/shelf');
+      // Navigator.of(context).pushNamed('/shelf');
     } else {
       currentTrack = FiresideState.currentTrack!;
       ColorScheme.fromImageProvider(provider: currentTrack.image.image)

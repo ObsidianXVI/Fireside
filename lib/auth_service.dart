@@ -9,7 +9,8 @@ class AuthService {
 
   static Future<T> withToken<T>(Future<T> Function(String) action,
       [BuildContext? context]) {
-    if (_authToken != null) {
+    if (debugToken != null) return action(debugToken!);
+    if (isAuthorized) {
       return action(_authToken!);
     } else {
       throw Exception('no_auth_token');

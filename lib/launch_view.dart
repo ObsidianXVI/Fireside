@@ -24,7 +24,7 @@ class _FiresideLaunchViewState extends State<FiresideLaunchView> {
   Widget build(BuildContext context) {
     return const Material(
       child: Center(
-        child: Text('Make this view look pretty'),
+        child: Text('Launch View'),
       ),
     );
   }

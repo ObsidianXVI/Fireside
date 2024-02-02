@@ -12,9 +12,10 @@ class FiresideDevView extends StatefulWidget {
 class FiresideDevViewState extends State<FiresideDevView> {
   @override
   Widget build(BuildContext context) {
-    return Material(
+    return const Material(
       color: Colors.purple,
-      child: FiresideShelfView<Track>(
+      child:
+          SizedBox(), /* FiresideShelfView<Track>(
         items: List<Track>.generate(
           15,
           (index) => Track(
@@ -34,7 +35,7 @@ class FiresideDevViewState extends State<FiresideDevView> {
           track: track,
           callback: () {},
         ),
-      ),
+      ), */
     );
   }
 }

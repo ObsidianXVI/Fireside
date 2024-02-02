@@ -15,8 +15,11 @@ class FiresideAuthViewState extends State<FiresideAuthView> {
         child: TextButton(
           onPressed: () async {
             try {
-              AuthService.performAuth()
-                  .then((_) => Navigator.of(context).pushNamed('/shelf'));
+              await AuthService.performAuth();
+
+              if (mounted) {
+                Navigator.of(context).pushNamed('/launch');
+              }
             } catch (e) {
               // This simple try-catch solves a lot of problems, so we'll
               // just leave it here
