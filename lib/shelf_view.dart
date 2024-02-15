@@ -10,9 +10,6 @@ class FiresideShelfView extends StatefulWidget {
 class FiresideShelfViewState extends State<FiresideShelfView> {
   final ScrollController scrollController = FixedExtentScrollController();
   final List<Playlist> playlists = [];
-  late final Future playlistFuture = AuthService.withToken((token) async {
-    playlists.addAll(await SpotifyService.getPlaylists());
-  });
 
   @override
   Widget build(BuildContext context) {
@@ -21,7 +18,9 @@ class FiresideShelfViewState extends State<FiresideShelfView> {
       child: Align(
         alignment: Alignment.centerLeft,
         child: FutureBuilder(
-          future: playlistFuture,
+          future: AuthService.withToken((token) async {
+            playlists.addAll(await SpotifyService.getPlaylists());
+          }),
           builder: (context, snapshot) {
             if (snapshot.connectionState != ConnectionState.waiting) {
               return Container(

@@ -21,32 +21,26 @@ class FiresideTrackCarouselViewState extends State<FiresideTrackCarouselView> {
   Color bgColor = Colors.transparent;
   Color textColor = Colors.transparent;
   int currentIndex = 0;
-  // List<Widget> tiles = [];
+
+  Future<void> updateColors(ImageProvider imageProvider) async {
+    final ColorScheme scheme =
+        await ColorScheme.fromImageProvider(provider: imageProvider);
+    setState(() {
+      bgColor = scheme.secondaryContainer;
+      textColor = scheme.primary;
+    });
+  }
 
   @override
   void initState() {
-    updateBgColorIfTrackOrPlaylist();
+    Future.delayed(Duration.zero, () async {
+      if (tracks.isNotEmpty) {
+        await updateColors(tracks.first.image.image);
+      }
+    });
     super.initState();
   }
 
-  void updateBgColorIfTrackOrPlaylist([int index = 0]) async {
-    /* if (widget.items.isNotEmpty) {
-      ColorScheme? colorScheme;
-      if (widget.items.first is Track) {
-        colorScheme = await ColorScheme.fromImageProvider(
-            provider: (widget.items[index] as Track).image.image);
-      } else if (widget.items.first is Playlist) {
-        colorScheme = await ColorScheme.fromImageProvider(
-            provider: (widget.items[index] as Track).image.image);
-      }
-      setState(() {
-        bgColor = colorScheme!.primary;
-        textColor = bgColor.lighterTone.withOpacity(0.85);
-      });
-    } */
-  }
-
-  Future<void> updateBackgroundColor(ImageProvider imageProvider) async {}
   @override
   Widget build(BuildContext context) {
     return Material(
@@ -57,46 +51,67 @@ class FiresideTrackCarouselViewState extends State<FiresideTrackCarouselView> {
           future: trackFuture,
           builder: (context, snapshot) {
             if (snapshot.connectionState != ConnectionState.waiting) {
-              return Row(
+              return Stack(
                 children: [
-                  Container(
-                    width: 400,
-                    height: 900,
-                    child: ListWheelScrollView(
-                      controller: scrollController,
-                      physics: const FixedExtentScrollPhysics(),
-                      itemExtent: 300,
-                      offAxisFraction: 1.5,
-                      diameterRatio: 4.4,
-                      onSelectedItemChanged: (index) async {
-                        currentIndex = index;
-                        updateBgColorIfTrackOrPlaylist(index);
-                      },
-                      children: [
-                        for (final track in tracks) TrackItem(track: track)
-                      ],
+                  Positioned(
+                    left: 0,
+                    child: Container(
+                      width: 400,
+                      height: 900,
+                      child: ListWheelScrollView(
+                        clipBehavior: Clip.none,
+                        controller: scrollController,
+                        renderChildrenOutsideViewport: true,
+                        physics: const FixedExtentScrollPhysics(),
+                        itemExtent: 300,
+                        offAxisFraction: 1.5,
+                        diameterRatio: 4.4,
+                        squeeze: 0.96,
+                        onSelectedItemChanged: (index) async {
+                          currentIndex = index;
+                          await updateColors(tracks[index].image.image);
+                        },
+                        children: [
+                          for (final track in tracks) TrackItem(track: track)
+                        ],
+                      ),
                     ),
                   ),
-                  const Spacer(),
-                  Container(
-                    width: 750,
-                    height: 900,
-                    child: Padding(
-                      padding: const EdgeInsets.only(
-                        right: 100,
-                        top: 100,
-                      ),
+                  Positioned(
+                    right: 50,
+                    top: 150,
+                    child: SizedBox(
+                      width: 750,
+                      height: 900,
                       child: Align(
                         alignment: Alignment.topRight,
-                        child: Text(
-                          tracks[currentIndex].name,
-                          style: TextStyle(
-                            fontFamily: 'Cairo',
-                            color: textColor,
-                            fontWeight: FontWeight.w800,
-                            fontSize: 200,
-                            height: 0.8,
-                          ),
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.end,
+                          children: [
+                            Text(
+                              tracks[currentIndex].name,
+                              textAlign: TextAlign.right,
+                              style: TextStyle(
+                                fontFamily: 'Cairo',
+                                color: textColor,
+                                fontWeight: FontWeight.w800,
+                                fontSize: 120,
+                                height: 0.8,
+                              ),
+                            ),
+                            const SizedBox(height: 80),
+                            Text(
+                              tracks[currentIndex].artists.join(', '),
+                              textAlign: TextAlign.right,
+                              style: TextStyle(
+                                fontFamily: 'Cairo',
+                                color: textColor,
+                                fontWeight: FontWeight.w300,
+                                fontSize: 50,
+                                height: 0.8,
+                              ),
+                            ),
+                          ],
                         ),
                       ),
                     ),

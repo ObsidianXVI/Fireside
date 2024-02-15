@@ -32,15 +32,15 @@ class FiresidePlayerState extends State<FiresidePlayer>
       // Navigator.of(context).pushNamed('/shelf');
     } else {
       currentTrack = FiresideState.currentTrack!;
-      ColorScheme.fromImageProvider(provider: currentTrack.image.image)
-          .then((ColorScheme colorScheme) {
+      Future.delayed(Duration.zero, () async {
+        final ColorScheme scheme = await ColorScheme.fromImageProvider(
+            provider: currentTrack.image.image);
         setState(() {
-          bgColor = colorScheme.primary;
-          textColor = bgColor.lighterTone.withOpacity(0.85);
-          print(textColor);
-          print(bgColor);
+          bgColor = scheme.secondaryContainer;
+          textColor = scheme.primary;
         });
       });
+
       SpotifyService.playTrack(currentTrack);
     }
     super.initState();
@@ -177,8 +177,8 @@ class FiresidePlayerState extends State<FiresidePlayer>
                     primary: primary,
                     accent: accent,
                     iconData: Icons.skip_previous,
-                    callback: () {
-                      SpotifyService.skipToPrevious();
+                    callback: () async {
+                      await SpotifyService.skipToPrevious();
                     },
                   ),
                   const SizedBox(width: 20),
@@ -203,8 +203,8 @@ class FiresidePlayerState extends State<FiresidePlayer>
                     primary: primary,
                     accent: accent,
                     iconData: Icons.skip_next,
-                    callback: () {
-                      SpotifyService.skipToNext();
+                    callback: () async {
+                      await SpotifyService.skipToNext();
                     },
                   ),
                 ],

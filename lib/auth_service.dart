@@ -13,7 +13,7 @@ class AuthService {
     if (isAuthorized) {
       return action(_authToken!);
     } else {
-      throw Exception('no_auth_token');
+      throw Exception('NO Auth Token');
     }
   }
 

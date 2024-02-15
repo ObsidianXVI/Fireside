@@ -17,18 +17,16 @@ class TrackItem extends StatelessWidget {
           Navigator.of(context).pushNamed('/player');
         },
         child: Container(
-          clipBehavior: Clip.none,
           width: 620,
           height: 320,
-          color: Colors.red,
           child: Stack(
             children: [
               Positioned(
-                top: -10,
-                right: -50,
+                top: 0,
+                right: 0,
                 child: Container(
-                  width: 320,
-                  height: 320,
+                  width: 300,
+                  height: 300,
                   decoration: const BoxDecoration(
                     image: DecorationImage(
                       image: vinylRecordImg,
@@ -37,19 +35,20 @@ class TrackItem extends StatelessWidget {
                   ),
                 ),
               ),
-              /* Positioned(
+              Positioned(
                 left: 0,
                 child: Container(
                   width: 300,
                   height: 300,
                   decoration: BoxDecoration(
+                    borderRadius: BorderRadius.circular(3),
                     image: DecorationImage(
                       image: track.image.image,
                       fit: BoxFit.cover,
                     ),
                   ),
                 ),
-              ), */
+              ),
             ],
           ),
         ),

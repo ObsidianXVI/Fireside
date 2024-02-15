@@ -11,11 +11,13 @@ class _FiresideLaunchViewState extends State<FiresideLaunchView> {
 
   @override
   void initState() {
-    if (!AuthService.isAuthorized) {
-      Navigator.of(context).pushNamed('/auth');
-    } else {
-      Navigator.of(context).pushNamed('/shelf');
-    }
+    Future.delayed(Duration.zero, () {
+      if (!AuthService.isAuthorized) {
+        Navigator.of(context).pushNamed('/auth');
+      } else {
+        Navigator.of(context).pushNamed('/shelf');
+      }
+    });
 
     super.initState();
   }

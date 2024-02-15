@@ -30,8 +30,8 @@ late final String username;
 const AssetImage vinylRecordImg = AssetImage('images/vinyl_1.png');
 
 // For dev purposes only
-const String? debugToken =
-    "BQBWF1ZCuuZQ_iWEbjhlCFgtiiq_os-rPA341gq10R1FgJjqsxQ30YtL7sHqJBg_njQ85dcEPX51hrvzC6ive7C21a6Hd81ehB-GGX4UnQR3YpN44PC8_bocIuAOD0NUhjsiw25N1YqvnHFJnUWcVXK9g-IsfxQ1wWDzIcft7NNw-Ynmsqre61F9D9mFqRKJ9iZFpTgSmCjLVl5SY-pbROqqYw_-";
+String?
+    debugToken; // = "BQBWF1ZCuuZQ_iWEbjhlCFgtiiq_os-rPA341gq10R1FgJjqsxQ30YtL7sHqJBg_njQ85dcEPX51hrvzC6ive7C21a6Hd81ehB-GGX4UnQR3YpN44PC8_bocIuAOD0NUhjsiw25N1YqvnHFJnUWcVXK9g-IsfxQ1wWDzIcft7NNw-Ynmsqre61F9D9mFqRKJ9iZFpTgSmCjLVl5SY-pbROqqYw_-";
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   final Map secrets =
