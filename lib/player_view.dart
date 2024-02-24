@@ -81,7 +81,7 @@ class FiresidePlayerState extends State<FiresidePlayer>
                   Positioned(
                     top: 20,
                     right: 300,
-                    width: 700,
+                    width: 850,
                     height: 650,
                     child: Container(
                       width: 700,
@@ -94,7 +94,7 @@ class FiresidePlayerState extends State<FiresidePlayer>
                           fontFamily: 'Cairo',
                           color: textColor,
                           fontWeight: FontWeight.w800,
-                          fontSize: 200,
+                          fontSize: 170,
                           height: 0.8,
                         ),
                       ),

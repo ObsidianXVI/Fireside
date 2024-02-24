@@ -155,7 +155,7 @@ class SpotifyService {
 
   static Future<void> skipToNext() async {
     return await AuthService.withToken((String token) async {
-      await put(Uri.https('api.spotify.com', '/v1/me/player/next'), headers: {
+      await post(Uri.https('api.spotify.com', '/v1/me/player/next'), headers: {
         'Authorization': 'Bearer $token',
       });
     });
@@ -163,7 +163,7 @@ class SpotifyService {
 
   static Future<void> skipToPrevious() async {
     return await AuthService.withToken((String token) async {
-      await put(Uri.https('api.spotify.com', '/v1/me/player/previous'),
+      await post(Uri.https('api.spotify.com', '/v1/me/player/previous'),
           headers: {
             'Authorization': 'Bearer $token',
           });

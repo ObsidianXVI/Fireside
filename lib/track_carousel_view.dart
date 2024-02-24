@@ -17,6 +17,7 @@ class FiresideTrackCarouselViewState extends State<FiresideTrackCarouselView> {
           FiresideState.currentPlaylist!));
     }
   });
+  bool firstLoad = true;
 
   Color bgColor = Colors.transparent;
   Color textColor = Colors.transparent;
@@ -32,16 +33,6 @@ class FiresideTrackCarouselViewState extends State<FiresideTrackCarouselView> {
   }
 
   @override
-  void initState() {
-    Future.delayed(Duration.zero, () async {
-      if (tracks.isNotEmpty) {
-        await updateColors(tracks.first.image.image);
-      }
-    });
-    super.initState();
-  }
-
-  @override
   Widget build(BuildContext context) {
     return Material(
       color: bgColor,
@@ -51,6 +42,14 @@ class FiresideTrackCarouselViewState extends State<FiresideTrackCarouselView> {
           future: trackFuture,
           builder: (context, snapshot) {
             if (snapshot.connectionState != ConnectionState.waiting) {
+              if (firstLoad) {
+                WidgetsBinding.instance.addPostFrameCallback((_) async {
+                  if (tracks.isNotEmpty) {
+                    await updateColors(tracks.first.image.image);
+                  }
+                  firstLoad = false;
+                });
+              }
               return Stack(
                 children: [
                   Positioned(

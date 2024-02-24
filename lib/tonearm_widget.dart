@@ -12,53 +12,65 @@ class ToneArmWidget extends StatefulWidget {
   ToneArmWidgetState createState() => ToneArmWidgetState();
 }
 
-class ToneArmWidgetState extends State<ToneArmWidget> {
+class ToneArmWidgetState extends State<ToneArmWidget>
+    with SingleTickerProviderStateMixin {
   double rotAngle = -pi / 8;
+  late final AnimationController _pauseController = AnimationController(
+    duration: const Duration(seconds: 2),
+    vsync: this,
+  );
+  late final Animation<double> _pauseAnimation = CurvedAnimation(
+    parent: _pauseController,
+    curve: Curves.easeOutQuart,
+  );
 
   @override
   Widget build(BuildContext context) {
     return Center(
-      child: Transform(
-        transform: Matrix4.rotationZ(rotAngle),
-        origin: Offset(205, 68),
-        child: Container(
-          // color: Colors.green,
-          child: Stack(
-            children: [
-              Image(
-                image: AssetImage('images/arm_1.png'),
-              ),
-              Positioned(
-                top: 68,
-                left: 205, //61,
-                child: Container(
-                  width: 10,
-                  height: 10,
-                  // color: Colors.amber,
+      child: RotationTransition(
+        turns: _pauseAnimation,
+        child: Transform(
+          transform: Matrix4.rotationZ(rotAngle),
+          origin: const Offset(205, 68),
+          child: Container(
+            // color: Colors.green,
+            child: Stack(
+              children: [
+                const Image(
+                  image: AssetImage('images/arm_1.png'),
                 ),
-              ),
-              Positioned(
-                top: 6,
-                right: 20,
-                child: Transform.rotate(
-                  angle: pi / 4,
-                  child: GestureDetector(
-                    onTap: () {
-                      setState(() {
-                        widget.toggleCallback();
-                        rotAngle = rotAngle == -pi / 8 ? -pi / 4 : -pi / 8;
-                      });
-                    },
-                    child: Container(
-                      width: 30,
-                      height: 40,
-                      color: Colors.transparent,
-                      // color: Colors.pink,
+                Positioned(
+                  top: 68,
+                  left: 205, //61,
+                  child: Container(
+                    width: 10,
+                    height: 10,
+                    // color: Colors.amber,
+                  ),
+                ),
+                Positioned(
+                  top: 6,
+                  right: 20,
+                  child: Transform.rotate(
+                    angle: pi / 4,
+                    child: GestureDetector(
+                      onTap: () {
+                        setState(() {
+                          widget.toggleCallback();
+                          rotAngle = rotAngle == -pi / 8 ? -pi / 4 : -pi / 8;
+                        });
+                      },
+                      child: Container(
+                        width: 30,
+                        height: 40,
+                        color: Colors.transparent,
+                        // color: Colors.pink,
+                      ),
                     ),
                   ),
                 ),
-              ),
-            ],
+              ],
+            ),
           ),
         ),
       ),
